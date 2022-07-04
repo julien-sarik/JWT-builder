@@ -17,6 +17,7 @@ import java.security.cert.Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class App {
 
@@ -37,11 +38,12 @@ public class App {
         final Signer signer = rsaSigner((RSAPrivateKey) key);
 
         final ObjectNode content = MAPPER.createObjectNode();
-        content.put("aud", "http://localhost:8180/auth/realms/sandbox");
-        content.putArray("roles").add("admin");
-        content.put("sub", "055bfcea-4780-462d-9f0e-b5d3972a902e");
-        content.put("exp", "1613398398");
-        content.put("jti", System.currentTimeMillis());
+        final String client_id = "371c28e3-e888-441a-b716-4a85b848d748";
+        content.put("iss", client_id);
+        content.put("sub", client_id);
+        content.put("aud", "https://api.preprod.fusionfabric.cloud/login/v1");
+        content.put("exp", System.currentTimeMillis() / 1000 + TimeUnit.HOURS.toSeconds(1));
+        content.put("jti", Long.toString(System.currentTimeMillis()));
         final Map<String, String> header = Collections.singletonMap("kid", "-RtrYV6X0U5WkXBGjbXDlb2APg8vkWY_hhFjQey3mrY");
 
         final Jwt jwt = createJwt(content, header, signer);
