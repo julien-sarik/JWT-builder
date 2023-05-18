@@ -14,3 +14,6 @@ providing also:
 
 # sign JWTs
 ReadFromPem class parses the RSA private key from the provided PEM file then sign tokens using SHA256withRSA algorithm.
+
+# generate a Java keystore
+`keytool -genkeypair -alias foo-client -keyalg RSA -keysize 2048 -keystore keystore.jks -storepass storepass`
